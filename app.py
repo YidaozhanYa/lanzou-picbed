@@ -7,6 +7,7 @@ from hashlib import md5
 from os import remove
 
 client = LanZouCloud()
+guest = LanZouCloud()
 status = client.login_by_cookie(config.cookie)  # 登录
 if status != LanZouCloud.SUCCESS:
     raise BaseException
@@ -39,7 +40,8 @@ async def upload(file: UploadFile):
 async def get_pic(file_name: str):
     try:
         file_id = int(file_name.split('.')[0])
-        url = client.get_durl_by_url(client.get_share_info(file_id).url).durl
+        share_url = client.get_share_info(file_id).url
+        url = guest.get_durl_by_url(share_url).durl
         if url == "":
             return {'error': 'error'}
         return RedirectResponse(url)
@@ -51,9 +53,11 @@ async def get_pic(file_name: str):
 async def get_info(file_name: str):
     try:
         file_id = int(file_name.split('.')[0])
-        file = client.get_file_info_by_id(file_id)
+        share_url = client.get_share_info(file_id).url
+        file = guest.get_durl_by_url(share_url)
+        share_info = guest.get_file_info_by_url(share_url)
         return {'file_name': file_name, 'file_id': file_id, 'fake_file_name': file.name, 'direct_url': file.durl,
-                'share_url': file.url, 'size': file.size}
+                'share_url': share_url, 'size': share_info.size}
     except:
         return {'error': 'error'}
 
