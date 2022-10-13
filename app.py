@@ -53,7 +53,7 @@ async def get_info(file_name: str):
         file_id = int(file_name.split('.')[0])
         file = client.get_file_info_by_id(file_id)
         return {'file_name': file_name, 'file_id': file_id, 'fake_file_name': file.name, 'direct_url': file.durl,
-                'size': file.size}
+                'share_url': file.url, 'size': file.size}
     except:
         return {'error': 'error'}
 
