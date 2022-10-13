@@ -40,6 +40,8 @@ async def get_pic(file_name: str):
     try:
         file_id = int(file_name.split('.')[0])
         url = client.get_durl_by_id(file_id).durl
+        if url == "":
+            return {'error': 'error'}
         return RedirectResponse(url)
     except:
         return {'error': 'error'}
