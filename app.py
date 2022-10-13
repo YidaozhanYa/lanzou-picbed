@@ -39,7 +39,7 @@ async def upload(file: UploadFile):
 async def get_pic(file_name: str):
     try:
         file_id = int(file_name.split('.')[0])
-        url = client.get_durl_by_id(file_id).durl
+        url = client.get_durl_by_url(client.get_share_info(file_id).url).durl
         if url == "":
             return {'error': 'error'}
         return RedirectResponse(url)
